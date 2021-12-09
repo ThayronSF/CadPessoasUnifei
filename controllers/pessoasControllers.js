@@ -7,8 +7,8 @@ const db = firebase.firestore(app);
 const addPessoa = async (req, res) => {
     try {
         const data = req.body;
-        await db.collection("pessoas").doc().set(data);
-        res.send("Dados gravados com sucesso");
+        const{id} = await db.collection("pessoas").doc().add(data);
+        res.status(200).send({"id":id, "nome":data.nome, "idade":data.idade});
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -28,7 +28,7 @@ const getPessoas = async(req, res)=>{
                     id: doc.id,
                     nome: doc.data().nome,
                     idade: doc.data().idade,
-                    cpf: doc.data().cpf,
+                    endereco: doc.data().endereco,
                 })
             })//Fim do forEach
             res.send(dataResp);
